@@ -1,0 +1,15 @@
+# Expectation:
+# For Pass, server exits with <= 128 or 134
+# For Pass+Bonus, subsequent curl request succeeds and response is correct, server terminates normally after SIGINT
+# Otherwise, 0 is awarded
+
+0.00 X start 8080
+
+# curl on alt port, don't care what happens to this
+0.00 X curl --proxy http://localhost:8080 http://localhost:8000 --max-time 3
+0.00 X wait-ignore 0
+
+# Hello world
+0.00 X curl --proxy http://localhost:8080 http://localhost
+
+0.10+0.02 0 score-task5 1 response.helloworld

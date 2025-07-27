@@ -1,0 +1,51 @@
+0.00 X start 8080
+
+0.00 X curl -X POST http://p2.unimelb-comp30023-2025.cloud.edu.au/seed -H 'Content-Type: text/plain' --data '30023'
+0.00 X curl --proxy http://localhost:8080 http://p2.unimelb-comp30023-2025.cloud.edu.au/gen/100000
+0.00 X wait 0
+0.00 X curl --proxy http://localhost:8080 http://p2.unimelb-comp30023-2025.cloud.edu.au/gen/10000
+
+0.00 X wait 1
+
+0.00 X curl -X POST http://unimelb-comp30023-2025.cloud.edu.au/seed -H 'Content-Type: text/plain' --data '42'
+0.00 X curl --proxy http://localhost:8080 http://unimelb-comp30023-2025.cloud.edu.au/gen/100000
+0.00 X wait 2
+0.00 X curl --proxy http://localhost:8080 http://unimelb-comp30023-2025.cloud.edu.au/gen/10000
+0.00 X wait 3
+
+# Should return cached responses
+0.00 X response 0 54d86c31f221503373aa265aa2956c3cbf676b8b8827da605597577d3cde77c9
+0.00 X response 1 91c0df593918e55bc230b68b65c1d6a0b52a4ffaa2bc6a4d7869c3b5018c2885
+0.00 X response 2 54d86c31f221503373aa265aa2956c3cbf676b8b8827da605597577d3cde77c9
+0.00 X response 3 91c0df593918e55bc230b68b65c1d6a0b52a4ffaa2bc6a4d7869c3b5018c2885
+0.00 X log all.log
+
+0.50 0 stop
+
+
+pkill -9 htproxy
+
+make clean > /dev/null
+make > /dev/null
+
+rm -f response.* all.log
+
+./htproxy -p 8080 -c > all.log &
+
+curl -X POST http://unimelb-comp30023-2025.cloud.edu.au/seed -H 'Content-Type: text/plain' --data '30023'
+
+curl -s --proxy http://localhost:8080 http://unimelb-comp30023-2025.cloud.edu.au/gen/100000 > response.0
+echo "54d86c31f221503373aa265aa2956c3cbf676b8b8827da605597577d3cde77c9 response.0" | sha256sum -c
+
+curl -s --proxy http://localhost:8080 http://unimelb-comp30023-2025.cloud.edu.au/gen/10000 > response.1
+echo "91c0df593918e55bc230b68b65c1d6a0b52a4ffaa2bc6a4d7869c3b5018c2885 response.1" | sha256sum -c
+
+curl -X POST http://unimelb-comp30023-2025.cloud.edu.au/seed -H 'Content-Type: text/plain' --data '42'
+
+curl -s --proxy http://localhost:8080 http://unimelb-comp30023-2025.cloud.edu.au/gen/100000 > response.2
+echo "54d86c31f221503373aa265aa2956c3cbf676b8b8827da605597577d3cde77c9 response.2" | sha256sum -c
+
+curl -s --proxy http://localhost:8080 http://unimelb-comp30023-2025.cloud.edu.au/gen/10000 > response.3
+echo "91c0df593918e55bc230b68b65c1d6a0b52a4ffaa2bc6a4d7869c3b5018c2885 response.3" | sha256sum -c
+
+pkill -2 htproxy

@@ -1,0 +1,14 @@
+# Expectation:
+# For Pass, server exits with <= 128 or 134
+# For Pass+Bonus, subsequent curl request succeeds and response is correct, server terminates normally after SIGINT
+# Otherwise, 0 is awarded
+
+0.00 X start 8080
+
+# Send 5 newlines to htproxy
+0.00 X send \n\n\n\n\n
+
+# Hello world
+0.00 X curl --proxy http://localhost:8080 http://localhost
+
+0.10+0.02 0 score-task5 0 response.helloworld

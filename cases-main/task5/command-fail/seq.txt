@@ -1,0 +1,12 @@
+# Expectation: Exits with < 124, 134, or listens on default port
+# Preferred: Exit with status 1
+# Applies to any CLI input which is not valid per specification
+
+# Start htproxy with no arg
+0.00 X start-arg none
+# Start htproxy with arg -p
+0.00 X start-arg -p
+# Start htproxy with arg -p comp30023
+0.00 X start-arg -p comp30023
+
+0.10 0 nop

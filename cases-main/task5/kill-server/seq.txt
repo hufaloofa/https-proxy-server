@@ -1,0 +1,21 @@
+# Expectation:
+# For Pass, server exits with <= 128 or 134
+# For Pass+Bonus, subsequent curl request succeeds and response is correct, server terminates normally after SIGINT
+# Otherwise, 0 is awarded
+
+0.00 X start 8080
+
+0.00 X curl-post -X POST http://localhost/seed -H 'Content-Type: text/plain' --data '30023'
+0.00 X curl --proxy http://localhost:8080 http://localhost/gen-plain/100000000
+
+# Ensure that some bytes are received
+0.00 X check-recv 0
+
+# Kill the proxied server
+0.00 X stop-vis
+0.00 X wait-ignore 0
+
+# Response from origin server
+0.00 X curl --proxy http://localhost:8080 http://localhost/robots.txt
+
+0.10+0.02 0 score-task5 1 response

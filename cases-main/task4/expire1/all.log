@@ -1,0 +1,16 @@
+Accepted
+Request tail X-COMP30023: Hi
+GETting localhost http://localhost/echo4/1
+Response body length 13
+Accepted
+Request tail X-COMP30023: Hi
+GETting localhost http://localhost/echo4/2
+Response body length 15
+Accepted
+Request tail X-COMP30023: Hi
+Serving localhost http://localhost/echo4/1 from cache
+Accepted
+Request tail X-COMP30023: Hi
+Stale entry for localhost http://localhost/echo4/2
+GETting localhost http://localhost/echo4/2
+Response body length 16

@@ -1,0 +1,11 @@
+# Expectation: Exits with < 124 or 134
+# Preferred: Exit with status 1
+
+0.00 X start 8080
+
+# Start htproxy with arg -p 8080
+0.00 X start-arg-stop -p 8080
+
+0.00 X stop
+
+0.10 0 nop
